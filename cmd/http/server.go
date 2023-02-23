@@ -3,47 +3,36 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
+	"go.uber.org/zap"
+
+	handler2 "onlyCloudBackend/app/files/handler"
+	"onlyCloudBackend/app/users/handler"
+	_ "onlyCloudBackend/swagger"
 )
 
 type AppServer struct {
+	app        *fiber.App
+	logger     *zap.Logger
+	listenAddr string
 }
 
-func NewServer() AppServer {
-
-	return AppServer{}
-}
-
-// @title Fiber Example API
-// @version 1.0
-// @description This is a sample swagger for Fiber
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email fiber@swagger.io
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:8080
-// @BasePath /
-func (a *AppServer) Run() error {
-
+func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 	app := fiber.New()
 
-	app.Get("/swagger/*", swagger.HandlerDefault) // default
+	handler.Register(app, handler.NewUsershandler())
+	handler2.Register(app, handler2.NewFilesHandler())
 
-	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
-		URL:         "http://example.com/doc.json",
-		DeepLinking: false,
-		// Expand ("list") or Collapse ("none") tag groups by default
-		DocExpansion: "none",
-		// Prefill OAuth ClientId on Authorize popup
-		OAuth: &swagger.OAuthConfig{
-			AppName:  "OAuth Provider",
-			ClientId: "21bb4edc-05a7-4afc-86f1-2e151e4ba6e2",
-		},
-		// Ability to change OAuth2 redirect uri location
-		OAuth2RedirectUrl: "http://localhost:8080/swagger/oauth2-redirect.html",
+	app.Get("/swagger/*", swagger.New(swagger.Config{
+		PersistAuthorization: true,
 	}))
 
-	app.Listen(":8080")
+	return AppServer{app: app, logger: logger, listenAddr: listenAddr}
+}
 
-	return nil
+// @title OnlyCloud
+// @version 1.0
+// @description Modern cloud service
+// @BasePath /
+func (a *AppServer) Run() {
+	a.logger.Sugar().Fatal(a.app.Listen(a.listenAddr))
 }

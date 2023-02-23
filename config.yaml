@@ -9,7 +9,7 @@ server:
   #  PanicLevel - 4
   #  FatalLevel - 5
   logLevel: 0
-postgresQL:
+postgresql:
   Username: "postgres"
   Password: "postgres"
   Address: "localhost"

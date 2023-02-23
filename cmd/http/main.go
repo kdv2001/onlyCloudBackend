@@ -1,27 +1,33 @@
 package main
 
 import (
-	"github.com/spf13/viper"
 	"log"
+
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 const (
-	configPath = "././"
+	configPath = "./"
 	configName = "config"
 	configType = "yaml"
 )
 
 func main() {
-
 	viper.AddConfigPath(configPath)
 	viper.SetConfigName(configName)
 	viper.SetConfigType(configType)
-	err := viper.ReadInConfig()
-	if err != nil {
+
+	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal(err)
 	}
 
-	server := NewServer()
+	production, err := zap.NewProduction()
+	if err != nil {
+		return
+	}
+
+	server := NewServer(production, ":8888")
 
 	server.Run()
 }
