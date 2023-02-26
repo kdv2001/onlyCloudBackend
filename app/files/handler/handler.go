@@ -10,12 +10,14 @@ func NewFilesHandler() *FilesHandler {
 
 // GetFile godoc
 // @Summary Получение информации о файле
+// @Security ApiKeyAuth
 // @Tags files
 // @Produce  json
 // @Param id query string true "ID файла"
 // @Success 200 {object} files.GetFile
 // @Failure 400 {object} appErrors.AppError
 // @Failure 401 {object} appErrors.AppError
+// @Failure 403 {object} appErrors.AppError
 // @Failure 500 {object} appErrors.AppError
 // @Router /files [get]
 func GetFile(c fiber.Ctx) error {
@@ -24,6 +26,7 @@ func GetFile(c fiber.Ctx) error {
 
 // GetFileByPath godoc
 // @Summary Получение информации о файле по пути
+// @Security ApiKeyAuth
 // @Tags files
 // @Produce  json
 // @Param path query string true "Путь до файла"
@@ -38,6 +41,7 @@ func GetFileByPath(c fiber.Ctx) error {
 
 // DownloadFile godoc
 // @Summary Скачивание файла
+// @Security ApiKeyAuth
 // @Tags files
 // @Produce  json
 // @Param id query string true "ID файла"
@@ -52,6 +56,7 @@ func DownloadFile(c fiber.Ctx) error {
 
 // UploadFile godoc
 // @Summary Загрузка файла
+// @Security ApiKeyAuth
 // @Tags files
 // @Produce  json
 // @Accept json

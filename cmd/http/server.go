@@ -33,6 +33,12 @@ func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 // @version 1.0
 // @description Modern cloud service
 // @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Cookies
+// @description authToken
+
 func (a *AppServer) Run() {
 	a.logger.Sugar().Fatal(a.app.Listen(a.listenAddr))
 }

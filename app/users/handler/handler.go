@@ -1,11 +1,20 @@
 package handler
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
+)
 
-type UsersHandler struct{}
+type UsersHandler struct {
+	usersValidate *validator.Validate
+}
 
 func NewUsershandler() *UsersHandler {
-	return &UsersHandler{}
+	userValidator := validator.New()
+	// регистрация кастомных типов валидации
+	RegisterCustomTypes(userValidator)
+
+	return &UsersHandler{usersValidate: userValidator}
 }
 
 // SingUp godoc
@@ -23,7 +32,7 @@ func (h *UsersHandler) SingUp(c fiber.Ctx) error {
 }
 
 // SingIn godoc
-// @Summary Регистрация пользователя
+// @Summary Авторизация пользователя
 // @Tags auth
 // @Accept  json
 // @Produce  json
@@ -33,7 +42,7 @@ func (h *UsersHandler) SingUp(c fiber.Ctx) error {
 // @Failure 401 {object} appErrors.AppError
 // @Failure 500 {object} appErrors.AppError
 // @Router /users/sign-in [post]
-func (h *UsersHandler) SingIn(c fiber.Ctx) error {
+func (h *UsersHandler) SingIn(c *fiber.Ctx) error {
 	return nil
 }
 
@@ -47,5 +56,18 @@ func (h *UsersHandler) SingIn(c fiber.Ctx) error {
 // @Failure 500 {object} appErrors.AppError
 // @Router /users [get]
 func (h *UsersHandler) Authorize(c fiber.Ctx) error {
+	return nil
+}
+
+// Sessions godoc
+// @Summary Получение сессий пользователя
+// @Tags auth
+// @Produce  json
+// @Success 200 {object}
+// @Failure 400 {object} appErrors.AppError
+// @Failure 401 {object} appErrors.AppError
+// @Failure 500 {object} appErrors.AppError
+// @Router /users/sessions [get]
+func (h *UsersHandler) Sessions(c fiber.Ctx) error {
 	return nil
 }

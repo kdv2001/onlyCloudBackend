@@ -4,8 +4,8 @@ import "time"
 
 type User struct {
 	ID             string    `json:"ID"`
-	Email          string    `json:"email"`
-	PhoneNumber    string    `json:"phoneNumber"`
+	Email          string    `json:"email" validate:"required,email"`
+	PhoneNumber    string    `json:"phoneNumber" validate:"required,email"`
 	FirstName      string    `json:"firstName"`
 	SecondName     string    `json:"secondName"`
 	ThirdName      string    `json:"thirdName"`
@@ -19,6 +19,6 @@ type SingUp struct {
 }
 
 type SignIn struct {
-	Email    string
-	Password string
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }

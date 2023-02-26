@@ -6,8 +6,8 @@ import (
 )
 
 type AppError struct {
-	Msg         string
-	Code        int
+	Msg         string `example:"description"`
+	Code        int    `example:"401"`
 	Base        error  `json:"-"`
 	Description string `json:"-"`
 }
