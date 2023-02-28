@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  addr: 127.0.0.1
+  #  DebugLevel - -1
+  #  InfoLevel - 0
+  #  WarnLevel - 1
+  #  ErrorLevel - 2
+  #  DPanicLevel - 3
+  #  PanicLevel - 4
+  #  FatalLevel - 5
+  logLevel: 0
+postgresql:
+  Username: "postgres"
+  Password: "postgres"
+  Address: "localhost"
+  Port: "5432"
+  DbName: "postgres"
+redis:
+  Username: ""
+  Password: ""
+  Address: "localhost"
+  Port: "6379"
