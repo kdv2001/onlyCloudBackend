@@ -63,7 +63,7 @@ func (h *UsersHandler) Authorize(c fiber.Ctx) error {
 // @Summary Получение сессий пользователя
 // @Tags auth
 // @Produce  json
-// @Success 200 {object}
+// @Success 200 {object} users.User
 // @Failure 400 {object} appErrors.AppError
 // @Failure 401 {object} appErrors.AppError
 // @Failure 500 {object} appErrors.AppError

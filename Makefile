@@ -27,3 +27,7 @@ lint:
 	${GOLINT} run -c golangci.yml
 	@echo Running staticcheck:
 	staticcheck ./...
+
+build:
+	go mod tidy
+	go build -o onlyCloud ./cmd/http/...

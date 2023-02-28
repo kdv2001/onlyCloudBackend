@@ -35,8 +35,8 @@ func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 // @BasePath /
 
 // @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Cookies
+// @in cookie
+// @name auth
 // @description authToken
 
 func (a *AppServer) Run() {
