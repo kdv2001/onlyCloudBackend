@@ -3,18 +3,21 @@ package handler
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+
+	"onlyCloudBackend/app/users"
 )
 
 type UsersHandler struct {
 	usersValidate *validator.Validate
+	usersUC       users.AuthUseCase
 }
 
-func NewUsershandler() *UsersHandler {
+func NewUsershandler(usersUC users.AuthUseCase) *UsersHandler {
 	userValidator := validator.New()
 	// регистрация кастомных типов валидации
-	RegisterCustomTypes(userValidator)
+	// RegisterCustomTypes(userValidator)
 
-	return &UsersHandler{usersValidate: userValidator}
+	return &UsersHandler{usersValidate: userValidator, usersUC: usersUC}
 }
 
 // SingUp godoc
@@ -43,6 +46,7 @@ func (h *UsersHandler) SingUp(c fiber.Ctx) error {
 // @Failure 500 {object} appErrors.AppError
 // @Router /users/sign-in [post]
 func (h *UsersHandler) SingIn(c *fiber.Ctx) error {
+	return users.ErrorWrongPassword
 	return nil
 }
 

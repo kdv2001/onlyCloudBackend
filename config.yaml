@@ -10,11 +10,11 @@ server:
   #  FatalLevel - 5
   logLevel: 0
 postgresql:
-  Username: "postgres"
-  Password: "postgres"
+  Username: "onlyUser"
+  Password: "12345678"
   Address: "localhost"
   Port: "5432"
-  DbName: "postgres"
+  DbName: "onlyCloud"
 redis:
   Username: ""
   Password: ""

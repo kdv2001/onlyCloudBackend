@@ -1,5 +1,9 @@
 package users
 
-type authUseCase interface{}
+type AuthUseCase interface {
+	SignIn() error
+}
 
-type authRepo interface{}
+type AuthRepo interface {
+	SignIn() error
+}
