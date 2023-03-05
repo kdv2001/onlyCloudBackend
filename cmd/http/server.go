@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net"
 	"reflect"
@@ -39,7 +38,7 @@ func (p postgresData) configurePostgresAddress() (string, error) {
 	v := reflect.ValueOf(p)
 	for i := 0; i < v.NumField(); i++ {
 		if v.Field(i).Interface() == "" {
-			return "", errors.New(fmt.Sprintf("postgresData field %s is empty", v.Type().Field(i).Name))
+			return "", fmt.Errorf("postgresData field %s is empty", v.Type().Field(i).Name)
 		}
 	}
 
