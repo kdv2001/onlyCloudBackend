@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
+	"reflect"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -25,17 +27,41 @@ type AppServer struct {
 	listenAddr string
 }
 
+type postgresData struct {
+	UserName string
+	Password string
+	Address  string
+	Port     string
+	DbName   string
+}
+
+func (p postgresData) configurePostgresAddress() (string, error) {
+	v := reflect.ValueOf(p)
+	for i := 0; i < v.NumField(); i++ {
+		if v.Field(i).Interface() == "" {
+			return "", errors.New(fmt.Sprintf("postgresData field %s is empty", v.Type().Field(i).Name))
+		}
+	}
+
+	return fmt.Sprintf("postgres://%s:%s@%s/%s",
+		p.UserName, p.Password, net.JoinHostPort(p.Address, p.Port), p.DbName), nil
+}
+
 func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 	// postgres
-	postgresUser := viper.GetString("postgresql.Username")
-	postgresPassword := viper.GetString("postgresql.Password")
-	postgresPort := viper.GetString("postgresql.Port")
-	postgresDbAddress := viper.GetString("postgresql.Address")
-	postgresDbName := viper.GetString("postgresql.dbName")
-	postgresAddress := fmt.Sprintf("postgres://%s:%s@%s/%s",
-		postgresUser, postgresPassword, net.JoinHostPort(postgresDbAddress, postgresPort), postgresDbName)
+	p := postgresData{}
 
-	conn, err := pgx.Connect(context.Background(), postgresAddress)
+	err := viper.UnmarshalKey("postgresql", &p)
+	if err != nil {
+		logger.Sugar().Fatal(err)
+	}
+
+	uri, err := p.configurePostgresAddress()
+	if err != nil {
+		logger.Sugar().Fatal(err)
+	}
+
+	conn, err := pgx.Connect(context.Background(), uri)
 	if err != nil {
 		logger.Sugar().Fatal(err)
 	}

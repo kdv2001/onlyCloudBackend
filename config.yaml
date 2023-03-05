@@ -10,7 +10,7 @@ server:
   #  FatalLevel - 5
   logLevel: 0
 postgresql:
-  Username: "onlyUser"
+  UserName: "onlyUser"
   Password: "12345678"
   Address: "localhost"
   Port: "5432"
