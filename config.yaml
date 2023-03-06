@@ -12,7 +12,7 @@ server:
 postgresql:
   UserName: "onlyUser"
   Password: "12345678"
-  Address: "localhost"
+  Address: "db"
   Port: "5432"
   DbName: "onlyCloud"
 redis:

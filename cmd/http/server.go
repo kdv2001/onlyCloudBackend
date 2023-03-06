@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"reflect"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -34,16 +33,9 @@ type postgresData struct {
 	DbName   string
 }
 
-func (p postgresData) configurePostgresAddress() (string, error) {
-	v := reflect.ValueOf(p)
-	for i := 0; i < v.NumField(); i++ {
-		if v.Field(i).Interface() == "" {
-			return "", fmt.Errorf("postgresData field %s is empty", v.Type().Field(i).Name)
-		}
-	}
-
+func (p postgresData) configurePostgresAddress() string {
 	return fmt.Sprintf("postgres://%s:%s@%s/%s",
-		p.UserName, p.Password, net.JoinHostPort(p.Address, p.Port), p.DbName), nil
+		p.UserName, p.Password, net.JoinHostPort(p.Address, p.Port), p.DbName)
 }
 
 func NewServer(logger *zap.Logger, listenAddr string) AppServer {
@@ -55,10 +47,7 @@ func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 		logger.Sugar().Fatal(err)
 	}
 
-	uri, err := p.configurePostgresAddress()
-	if err != nil {
-		logger.Sugar().Fatal(err)
-	}
+	uri := p.configurePostgresAddress()
 
 	conn, err := pgx.Connect(context.Background(), uri)
 	if err != nil {
@@ -90,11 +79,11 @@ func NewServer(logger *zap.Logger, listenAddr string) AppServer {
 	return AppServer{app: app, logger: logger, listenAddr: listenAddr}
 }
 
+// Run
 // @title OnlyCloud
 // @version 1.0
 // @description Modern cloud service
 // @BasePath /
-
 // @securityDefinitions.apikey ApiKeyAuth
 // @in cookie
 // @name auth
